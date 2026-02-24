@@ -1,0 +1,25 @@
+---
+- name: Read CSV file
+  read_csv:
+    path: "{{ input_file }}"
+  register: csv
+
+- name: Display CSV input variables
+  debug:
+    msg: "{{ csv }}"
+  when: debug == True
+
+- name: Create VMs List
+  set_fact:
+    vms: "{{ lookup('template', 'templates/vms_list.j2') | from_yaml }}"
+
+- name: Display updated VMs input
+  debug:
+    msg: "{{ vms }}"
+  when: debug == True
+
+#- name: Prepare batches for async deploy
+#  vars:
+#    batch: "{{ item }}"
+#  include_tasks: run-vsphere-batch.yaml
+#  loop: "{{ vms | batch(batch_size) | list }}"
